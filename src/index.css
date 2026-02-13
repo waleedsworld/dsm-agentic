@@ -1,0 +1,542 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 10% 3%;
+    --foreground: 40 20% 99%;
+
+    --card: 220 8% 6%;
+    --card-foreground: 40 20% 99%;
+
+    --popover: 220 8% 6%;
+    --popover-foreground: 40 20% 99%;
+
+    --primary: 4 65% 54%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 8% 8%;
+    --secondary-foreground: 40 20% 99%;
+
+    --muted: 220 6% 12%;
+    --muted-foreground: 220 5% 65%;
+
+    --accent: 220 8% 10%;
+    --accent-foreground: 40 20% 99%;
+
+    --destructive: 4 65% 54%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 6% 15%;
+    --input: 220 6% 18%;
+    --ring: 4 65% 54%;
+
+    --radius: 0.25rem;
+
+    /* Brand tokens */
+    --crimson: 4 65% 54%;
+    --crimson-hover: 4 60% 44%;
+    --crimson-dark: 4 55% 32%;
+    --crimson-foreground: 0 0% 100%;
+
+    --gold: 43 87% 60%;
+    --gold-hover: 40 68% 50%;
+    --gold-pressed: 38 60% 44%;
+    --gold-foreground: 220 10% 4%;
+
+    --azure: 204 61% 51%;
+
+    /* Surface layers */
+    --surface-light: 40 20% 97%;
+    --surface-light-card: 40 25% 99%;
+    --surface-light-muted: 220 3% 52%;
+    --surface-elevated: 220 8% 8%;
+    --surface-dark: 220 10% 3%;
+    --surface-dark-elevated: 220 8% 10%;
+
+    --sidebar-background: 220 10% 4%;
+    --sidebar-foreground: 220 5% 65%;
+    --sidebar-primary: 4 65% 54%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 8% 10%;
+    --sidebar-accent-foreground: 40 20% 99%;
+    --sidebar-border: 220 6% 15%;
+    --sidebar-ring: 4 65% 54%;
+  }
+
+  /* Light mode overrides */
+  .light {
+    --background: 40 20% 98%;
+    --foreground: 220 10% 4%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 10% 4%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 10% 4%;
+
+    --primary: 4 65% 54%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 40 12% 96%;
+    --secondary-foreground: 220 10% 4%;
+
+    --muted: 40 10% 96%;
+    --muted-foreground: 220 3% 52%;
+
+    --accent: 40 15% 95%;
+    --accent-foreground: 220 10% 4%;
+
+    --destructive: 4 65% 54%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 8% 88%;
+    --input: 40 10% 92%;
+    --ring: 4 65% 54%;
+
+    /* Light mode surface colors */
+    --surface-dark: 40 20% 98%;
+    --surface-dark-elevated: 0 0% 100%;
+    --surface-elevated: 0 0% 100%;
+    --surface-light: 40 20% 98%;
+    --surface-light-card: 0 0% 100%;
+    --surface-light-muted: 40 10% 96%;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 3% 52%;
+    --sidebar-primary: 4 65% 54%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 15% 95%;
+    --sidebar-accent-foreground: 220 10% 4%;
+    --sidebar-border: 40 8% 88%;
+    --sidebar-ring: 4 65% 54%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    line-height: 1.5;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+  }
+  body {
+    @apply bg-background text-foreground overflow-x-hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  button, input, select, option, textarea {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::selection {
+    background: hsl(4 65% 54%);
+    color: hsl(0 0% 100%);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+  
+  /* Ensure all text elements use Inter */
+  p, span, div, a, li, td, th, label {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(220 10% 3%);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(4 65% 54% / 0.25);
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(4 65% 54% / 0.45);
+  }
+
+  /* Light mode scrollbar */
+  .light ::-webkit-scrollbar-track {
+    background: hsl(40 20% 97%);
+  }
+  .light ::-webkit-scrollbar-thumb {
+    background: hsl(4 65% 54% / 0.2);
+  }
+  .light ::-webkit-scrollbar-thumb:hover {
+    background: hsl(4 65% 54% / 0.35);
+  }
+}
+
+/* ── Film grain ─────────────────────────────────────── */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Light section overrides ────────────────────────── */
+.section-light {
+  --background: 40 20% 97%;
+  --foreground: 220 10% 4%;
+  --card: 40 25% 99%;
+  --card-foreground: 220 10% 4%;
+  --border: 40 8% 88%;
+  --muted: 40 10% 96%;
+  --muted-foreground: 220 3% 52%;
+  --secondary: 40 12% 96%;
+  --secondary-foreground: 220 10% 4%;
+  background: hsl(40 20% 97%);
+  color: hsl(220 10% 4%);
+}
+
+/* ── Mega menu ──────────────────────────────────────── */
+/* Mega menu is now controlled via React state and portal */
+
+/* ── Scroll animations ──────────────────────────────── */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-fade-right {
+  opacity: 0;
+  transform: translateX(-36px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.animate-fade-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.animate-scale-in {
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.animate-scale-in.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Stagger children */
+.stagger-children > *:nth-child(1) { transition-delay: 0ms; }
+.stagger-children > *:nth-child(2) { transition-delay: 80ms; }
+.stagger-children > *:nth-child(3) { transition-delay: 160ms; }
+.stagger-children > *:nth-child(4) { transition-delay: 240ms; }
+.stagger-children > *:nth-child(5) { transition-delay: 320ms; }
+.stagger-children > *:nth-child(6) { transition-delay: 400ms; }
+
+/* ── Heading underline reveal (red) ─────────────────── */
+.gold-line-reveal {
+  position: relative;
+  display: inline-block;
+}
+.gold-line-reveal::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, hsl(4 65% 54%), hsl(4 65% 54% / 0.2));
+  transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.visible .gold-line-reveal::after,
+.gold-line-reveal.visible::after {
+  width: 100%;
+}
+
+/* ── 3D Product Card Effect ─────────────────────────── */
+.product-3d-card {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.7s ease;
+  border-radius: 0.5rem;
+}
+.group:hover .product-3d-card {
+  animation: product3dSpin 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  filter: drop-shadow(0 16px 24px rgba(207,72,64,0.1));
+}
+.product-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.5rem;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(207,72,64,0.12) 45%,
+    rgba(207,72,64,0.06) 50%,
+    transparent 55%
+  );
+  opacity: 0;
+  pointer-events: none;
+}
+.group:hover .product-shine {
+  animation: shineSwipe 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes product3dSpin {
+  0%   { transform: rotateY(0deg) scale(1); }
+  40%  { transform: rotateY(14deg) scale(1.02); }
+  70%  { transform: rotateY(-6deg) scale(1.01); }
+  100% { transform: rotateY(0deg) scale(1); }
+}
+@keyframes shineSwipe {
+  0%   { opacity: 0; transform: translateX(-100%); }
+  30%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(100%); }
+}
+
+/* ── Premium 3D model viewer card ───────────────────── */
+.model-viewer-container {
+  position: relative;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.6s ease;
+}
+.group:hover .model-viewer-container {
+  transform: translateY(-3px);
+  filter: contrast(1.03) saturate(1.06);
+}
+
+/* Hide model-viewer default UI */
+model-viewer {
+  --poster-color: transparent;
+  --progress-bar-color: transparent;
+  --progress-bar-height: 0;
+}
+model-viewer::part(default-progress-bar) { display: none; }
+model-viewer::part(default-ar-button) { display: none; }
+
+/* ── CTA sheen effect (red) ─────────────────────────── */
+.cta-red-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.cta-red-sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    hsl(0 0% 100% / 0.15) 45%,
+    hsl(0 0% 100% / 0.25) 50%,
+    transparent 55%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.cta-red-sheen:hover::after {
+  transform: translateX(100%);
+}
+
+/* ── Ambient color orbs ─────────────────────────────── */
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25%      { transform: translate(30px, -20px) scale(1.05); }
+  50%      { transform: translate(-20px, 15px) scale(0.97); }
+  75%      { transform: translate(15px, 25px) scale(1.03); }
+}
+@keyframes orbColorCrimson {
+  0%, 100% { opacity: 0.06; }
+  50%      { opacity: 0.11; }
+}
+@keyframes orbColorGold {
+  0%, 100% { opacity: 0.03; }
+  50%      { opacity: 0.06; }
+}
+@keyframes orbColorAzure {
+  0%, 100% { opacity: 0.03; }
+  50%      { opacity: 0.06; }
+}
+
+/* ── Hero staggered reveal (clean fade) ─────────────── */
+.hero-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+}
+.hero-reveal.visible {
+  animation: heroFadeIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-reveal.visible:nth-child(2) { animation-delay: 0.12s; }
+.hero-reveal.visible:nth-child(3) { animation-delay: 0.24s; }
+.hero-reveal.visible:nth-child(4) { animation-delay: 0.36s; }
+.hero-reveal.visible:nth-child(5) { animation-delay: 0.48s; }
+
+@keyframes heroFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Per-character magnify text ──────────────────────── */
+.magnify-text-container {
+  cursor: default;
+}
+.magnify-word {
+  display: inline;
+  white-space: nowrap;
+}
+.magnify-char {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.25s ease,
+              text-shadow 0.25s ease;
+  will-change: transform, filter;
+}
+.magnify-space {
+  display: inline;
+  white-space: normal;
+  word-spacing: normal;
+}
+.magnify-gold {
+  color: hsl(43 87% 60%);
+}
+
+/* ── Magnetic button subtle shift ───────────────────── */
+.btn-magnetic {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s ease,
+              background-color 0.4s ease,
+              border-color 0.4s ease,
+              color 0.4s ease;
+}
+
+/* ── Cursor spotlight on dark sections (red) ─────────── */
+.cursor-glow {
+  position: relative;
+  overflow: hidden;
+}
+.cursor-glow-dot {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    hsl(4 65% 54% / 0.2) 0%,
+    hsl(4 65% 54% / 0.1) 25%,
+    hsl(4 65% 54% / 0.05) 50%,
+    transparent 70%
+  );
+  pointer-events: none;
+  will-change: left, top, opacity;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.2s ease;
+  opacity: 0;
+  mix-blend-mode: screen;
+  filter: blur(1px);
+  z-index: 5;
+}
+.cursor-glow:hover .cursor-glow-dot,
+.cursor-glow:has(.cursor-glow-dot:hover) .cursor-glow-dot {
+  opacity: 1;
+}
+
+/* ── Section divider glow (red) ─────────────────────── */
+.section-divider-red {
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    hsl(4 65% 54% / 0.3) 20%,
+    hsl(4 65% 54% / 0.5) 50%,
+    hsl(4 65% 54% / 0.3) 80%,
+    transparent 100%
+  );
+}
+
+/* ── Stagger children extended ─────────────────────── */
+.stagger-children > *:nth-child(7) { transition-delay: 480ms; }
+.stagger-children > *:nth-child(8) { transition-delay: 560ms; }
+.stagger-children > *:nth-child(9) { transition-delay: 640ms; }
+.stagger-children > *:nth-child(10) { transition-delay: 720ms; }
+.stagger-children > *:nth-child(11) { transition-delay: 800ms; }
+.stagger-children > *:nth-child(12) { transition-delay: 880ms; }
+
+/* ── Counter number tabular ──────────────────────────── */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Marquee (pure CSS, zero JS) ─────────────────────── */
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marqueeScroll 30s linear infinite;
+  will-change: transform;
+}
+
+/* ── Theme-aware utility classes ─────────────────────── */
+.bg-surface-dark {
+  background-color: hsl(var(--surface-dark));
+}
+.light .bg-surface-dark {
+  background-color: hsl(var(--surface-dark));
+}
+
+.bg-surface-elevated {
+  background-color: hsl(var(--surface-elevated));
+}
+.light .bg-surface-elevated {
+  background-color: hsl(var(--surface-elevated));
+}
+
+.bg-surface-card {
+  background-color: hsl(var(--card));
+}
+.light .bg-surface-card {
+  background-color: hsl(var(--card));
+}
+
+.text-foreground-primary {
+  color: hsl(var(--foreground));
+}
+
+.border-theme {
+  border-color: hsl(var(--border));
+}
+
+.bg-overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.light .bg-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+}
