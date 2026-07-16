@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback, ReactNode, useEffect, useRef } from 'react';
-import { Product } from '@/lib/api';
+import { Product, getProductById } from '@/lib/api';
 
 interface AppState {
   selectedProduct: Product | null;
@@ -208,7 +208,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     } else {
       // Fetch product by ID
       try {
-        const { getProductById } = await import('@/lib/api');
         const p = await getProductById(product);
         setState(prev => ({ ...prev, selectedProduct: p }));
         // Update URL

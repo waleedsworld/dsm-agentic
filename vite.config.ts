@@ -17,4 +17,17 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Split the heaviest third-party libs into their own chunks so the
+        // main bundle stays lean and the browser can cache vendors separately.
+        manualChunks: {
+          "vendor-three": ["three", "@google/model-viewer"],
+          "vendor-charts": ["recharts"],
+          "vendor-react": ["react", "react-dom", "react-router-dom"],
+        },
+      },
+    },
+  },
 });
