@@ -57,12 +57,48 @@ export interface AIAction {
   payload: Record<string, any>;
 }
 
+// ── Offline fallback ────────────────────────────────────────────────────────
+// When the backend is unreachable (fresh clone, offline demo, static deploy)
+// we serve the catalogue bundled with the repo so the UI still works.
+import {
+  localGetProducts,
+  localGetTopProducts,
+  localGetProductById,
+  localSearchProducts,
+  getStaticProducts,
+} from './staticCatalogue';
+
+let offlineNotified = false;
+function noteOffline(context: string) {
+  if (!offlineNotified) {
+    offlineNotified = true;
+    // eslint-disable-next-line no-console
+    console.info(`[DSM] Backend unavailable — serving the bundled catalogue offline (${context}).`);
+  }
+}
+
+/** Try the live backend; on any failure, fall back to the local catalogue. */
+async function withFallback<T>(live: () => Promise<T>, offline: () => T, context: string): Promise<T> {
+  try {
+    return await live();
+  } catch {
+    noteOffline(context);
+    return offline();
+  }
+}
+
 // ── API Client Functions ───────────────────────────────────────────────────
 
 export async function getTopProducts(limit = 10): Promise<ProductsResponse> {
-  const res = await fetch(`${API_BASE}/products/top?limit=${limit}`);
-  if (!res.ok) throw new Error('Failed to fetch top products');
-  return res.json();
+  return withFallback(
+    async () => {
+      const res = await fetch(`${API_BASE}/products/top?limit=${limit}`);
+      if (!res.ok) throw new Error('Failed to fetch top products');
+      return res.json();
+    },
+    () => localGetTopProducts(limit),
+    'top products',
+  );
 }
 
 export async function getProducts(params: {
@@ -83,37 +119,104 @@ export async function getProducts(params: {
   params.category?.forEach(c => searchParams.append('category', c));
   params.licenseType?.forEach(l => searchParams.append('licenseType', l));
 
-  const res = await fetch(`${API_BASE}/products?${searchParams}`);
-  if (!res.ok) throw new Error('Failed to fetch products');
-  return res.json();
+  return withFallback(
+    async () => {
+      const res = await fetch(`${API_BASE}/products?${searchParams}`);
+      if (!res.ok) throw new Error('Failed to fetch products');
+      return res.json();
+    },
+    () => localGetProducts(params),
+    'product list',
+  );
 }
 
 export async function getProductById(id: string | number): Promise<Product> {
-  const res = await fetch(`${API_BASE}/products/${id}`);
-  if (!res.ok) throw new Error(`Failed to fetch product ${id}`);
-  return res.json();
+  return withFallback(
+    async () => {
+      const res = await fetch(`${API_BASE}/products/${id}`);
+      if (!res.ok) throw new Error(`Failed to fetch product ${id}`);
+      return res.json();
+    },
+    () => {
+      const p = localGetProductById(id);
+      if (!p) throw new Error(`Product ${id} not found in catalogue`);
+      return p;
+    },
+    `product ${id}`,
+  );
 }
 
 export async function searchProducts(query: string): Promise<SearchResponse> {
-  const res = await fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}`);
-  if (!res.ok) throw new Error('Search failed');
-  return res.json();
+  return withFallback(
+    async () => {
+      const res = await fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}`);
+      if (!res.ok) throw new Error('Search failed');
+      return res.json();
+    },
+    () => localSearchProducts(query),
+    'search',
+  );
 }
 
 export async function aiSearch(query: string): Promise<AISearchResponse> {
-  const res = await fetch(`${API_BASE}/ai-search?q=${encodeURIComponent(query)}`);
-  if (!res.ok) throw new Error('AI search failed');
-  return res.json();
+  return withFallback(
+    async () => {
+      const res = await fetch(`${API_BASE}/ai-search?q=${encodeURIComponent(query)}`);
+      if (!res.ok) throw new Error('AI search failed');
+      return res.json();
+    },
+    () => {
+      const { products, suggestions } = localSearchProducts(query);
+      return {
+        intent: 'search',
+        filters: {},
+        productIds: products.map((p) => String(p.id)),
+        suggestions,
+      };
+    },
+    'ai search',
+  );
 }
 
 export async function aiChat(message: string, context?: Record<string, any>): Promise<AIChatResponse> {
-  const res = await fetch(`${API_BASE}/ai/chat`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message, context }),
-  });
-  if (!res.ok) throw new Error('AI chat failed');
-  return res.json();
+  return withFallback(
+    async () => {
+      const res = await fetch(`${API_BASE}/ai/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, context }),
+      });
+      if (!res.ok) throw new Error('AI chat failed');
+      return res.json();
+    },
+    () => offlineChat(message),
+    'ai chat',
+  );
+}
+
+/**
+ * A lightweight offline concierge. It can't reason like the live model, but it
+ * matches the message against the bundled catalogue so the chat still surfaces
+ * real products (and honestly tells you it's running offline).
+ */
+function offlineChat(message: string): AIChatResponse {
+  const { products, suggestions } = localSearchProducts(message);
+  if (products.length) {
+    return {
+      message: `I'm running in offline demo mode, but here are ${products.length} matching ${products.length === 1 ? 'licence' : 'licences'} from the catalogue. Connect the DSM backend for the full AI concierge.`,
+      actions: [
+        { type: 'OPEN_PRODUCT', payload: { id: products[0].id } },
+      ],
+      suggestions: suggestions.length ? suggestions : ['Microsoft Office', 'Windows 11', 'AutoCAD'],
+      products,
+    };
+  }
+  return {
+    message: "I'm running in offline demo mode. Try searching for a brand like Microsoft, Autodesk or Adobe, or connect the DSM backend for the full AI concierge.",
+    actions: [],
+    suggestions: ['Microsoft Office', 'Windows Server', 'AutoCAD', 'Kaspersky'],
+    products: getStaticProducts().slice(0, 6),
+  };
 }
 
 export async function productChat(message: string, productId: string | number): Promise<AIChatResponse> {
