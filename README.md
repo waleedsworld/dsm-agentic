@@ -6,8 +6,9 @@
 
 ### The luxury concierge for genuine software licences.
 
-Microsoft, Adobe, Autodesk & friends — browsed in 3D, sorted by an AI concierge,
-and delivered instantly. No dodgy keys, no buyer's remorse, just licences done right.
+Microsoft, Adobe, Autodesk & friends — browsed in 3D, summoned with **⌘K**, saved to a
+**wishlist**, sorted by an AI concierge, and delivered instantly. No dodgy keys, no buyer's
+remorse, just licences done right.
 
 <br/>
 
@@ -23,7 +24,7 @@ and delivered instantly. No dodgy keys, no buyer's remorse, just licences done r
 
 ![DSM in action](docs/media/demo.gif)
 
-<sub>A real capture — animated wireframe hero, the 3D licence shelf, and the concierge, live.</sub>
+<sub>A real capture — the animated wireframe hero, the ⌘K command palette, the 3D licence shelf, and a licence saved to the wishlist, all live.</sub>
 
 </div>
 
@@ -33,23 +34,49 @@ and delivered instantly. No dodgy keys, no buyer's remorse, just licences done r
 
 **DSM** is a premium storefront for legitimate software licensing. Think of it as the
 boutique of software keys — every product sits on the shelf as a spinnable **3D box**,
-an **AI concierge** helps you find the right SKU by chatting, and the whole thing is
-wrapped in a moody, crimson-on-charcoal design that takes itself just seriously enough.
+an **AI concierge** helps you find the right SKU by chatting, a **⌘K command palette** warps
+you anywhere in a keystroke, and the whole thing is wrapped in a moody, crimson-on-charcoal
+design that takes itself just seriously enough.
 
-It's a single-page app (React + Vite + TypeScript) with a storefront, product modals,
-a cart, a checkout flow, and a marketing surface — plus a built-in offline catalogue so
-it runs beautifully even when there's no backend in sight.
+It's a single-page app (React + Vite + TypeScript) with a storefront, product modals, a
+cart, a checkout flow, and a marketing surface — plus a built-in offline catalogue so it
+runs beautifully even when there's no backend in sight.
 
 > **Fun fact:** every product card renders a real `.glb` model with `@google/model-viewer`,
 > so the "boxes" actually catch the light as you scroll. It's shelf appeal, literally.
 
+## ✨ What's new in this release
+
+This build is a deep enhancement pass — eight focused feature branches merged into one
+polished storefront. The headliners:
+
+- 🖤 **Wishlist — "Saved Licences."** Tap the heart on any card to shelf it for later. A slide-out
+  drawer keeps your picks, a badge counts them, and it all **persists across visits** — close the
+  tab, come back tomorrow, your shortlist is still there.
+- ⌘ **Global command palette (⌘K / Ctrl-K).** Hit two keys and jump to any page or search any
+  product without touching the mouse. It's the power-user shortcut the boutique deserves.
+- 💎 **Premium loading & empty states.** Shimmer skeletons while the shelf stocks itself, and a
+  genuinely lovely empty state instead of a sad blank grid.
+- 📱 **Real mobile navigation.** A proper tablet/phone menu so the store is a joy below the fold of a laptop.
+- ♿ **Accessibility, taken seriously.** Skip-to-content link, keyboard focus rings, honest ARIA labels,
+  44px touch targets, and full `prefers-reduced-motion` support — the 3D hero mesh doesn't even boot
+  if you've asked your OS to calm things down.
+- ⚡ **Faster by design.** Routes are code-split, the heavy 3D stack is deferred until it's actually
+  needed, and a dead charting dependency was shown the door — smaller initial bundle, snappier first paint.
+- 🔎 **SEO & PWA polish.** Canonical URLs, rich Open Graph / Twitter cards, JSON-LD structured data,
+  a sitemap, a web manifest, and a full favicon set — DSM now looks sharp when it's shared, and installs like an app.
+- 🧪 **A real test suite + CI.** Vitest unit tests for the cart and offline fallback, a Playwright
+  end-to-end smoke test against the production bundle, and a GitHub Actions workflow to keep it honest.
+
 ## Feature reel
 
-- **A licence shelf, 347 deep** — Microsoft, Adobe, Autodesk, Chaos, SketchUp, Kaspersky and more.
-- **3D product boxes** — every card is a lazily-loaded, self-rotating GL model (**381 bundled**).
-  They catch light, cast shadows, and spin on hover — no screenshots, actual geometry.
+- **A licence shelf, hundreds deep** — Microsoft, Adobe, Autodesk, Chaos, SketchUp, Kaspersky and more.
+- **3D product boxes** — every card is a lazily-loaded, self-rotating GL model. They catch light,
+  cast shadows, and spin on hover — no screenshots, actual geometry.
 - **AI concierge** — a floating chat that understands "I need Office for 3 machines" and
   navigates the store for you (falls back to a local matcher when offline).
+- **⌘K command palette** — instant navigation and product search from the keyboard.
+- **Wishlist / Saved Licences** — heart it, drawer it, keep it — persisted locally.
 - **Smart filters & sort** — by brand, category, licence type, price and popularity, with
   both grid and list layouts.
 - **Cart → checkout flow** — the whole shopping journey, client-side and snappy.
@@ -62,32 +89,32 @@ it runs beautifully even when there's no backend in sight.
 
 ## Two faces, one build (the A/B toggle)
 
-DSM ships **two live experiences from the same bundle**, switched from the on-page settings
-panel (bottom-left cog) — no rebuild, no flag file, no redeploy:
+DSM ships **two live experiences from the same bundle** — no rebuild, no flag file, no redeploy:
 
-| Variant | What you get | Best for |
+| Variant | What you get | How to reach it |
 | --- | --- | --- |
-| **A — Full storefront** *(default)* | The complete boutique: hero, editorial spotlights, 3D grid, cart, checkout | Shoppers & showcasing |
-| **B — Concierge kiosk** | Marketing mode off → the chrome melts away and you're left with a full-screen AI concierge | Kiosks, embeds, "just help me pick" |
+| **A — Full storefront** *(default)* | The complete boutique: hero, editorial spotlights, 3D grid, cart, checkout | Just visit the site |
+| **B — Alternate hero** | A punchier, benefit-led landing headline for conversion testing | Append `?variant=b` to the URL |
+| **Concierge kiosk** | Marketing mode off → the chrome melts away and you're left with a full-screen AI concierge | Toggle **Marketing Mode** in the settings cog (bottom-left) |
 
 Flip **Marketing Mode** off and the entire site collapses into the assistant; flip it back on
-and the boutique returns. Same preferences, same catalogue, two very different front doors.
+and the boutique returns. Same preferences, same catalogue, very different front doors.
 
 ## Gallery
 
 | Home — dark | Home — light |
 | :---: | :---: |
-| ![Home dark](docs/media/home.png) | ![Home light](docs/media/home-light.png) |
+| ![Home dark](docs/media/home-dark.png) | ![Home light](docs/media/home-light.png) |
 
 | The 3D licence shelf | Cart |
 | :---: | :---: |
-| ![Store](docs/media/store.png) | ![Cart](docs/media/cart.png) |
+| ![Store](docs/media/store-dark.png) | ![Cart](docs/media/cart.png) |
 
 <div align="center">
 
-| Mobile home | Mobile store |
-| :---: | :---: |
-| <img src="docs/media/mobile-home.png" width="240" alt="DSM home on mobile" /> | <img src="docs/media/mobile-store.png" width="240" alt="DSM store on mobile" /> |
+| Mobile home |
+| :---: |
+| <img src="docs/media/home-mobile.png" width="260" alt="DSM home on mobile" /> |
 
 </div>
 
@@ -111,7 +138,8 @@ npm run dev
 Now visit **http://localhost:8080** and you're in. 🎉
 
 That's the whole ritual. On first load with no backend running, DSM quietly falls back to
-its bundled catalogue, so you'll see real products and 3D boxes straight away.
+its bundled catalogue, so you'll see real products and 3D boxes straight away. Press **⌘K**,
+heart a licence, and you've met the two newest tricks in under ten seconds.
 
 ### Build for production
 
@@ -151,31 +179,35 @@ catalogue and logs a friendly note in the console — the storefront never goes 
 | Build tool | **Vite 5** (`@vitejs/plugin-react-swc`) |
 | UI | **React 18** + **TypeScript** |
 | Styling | **Tailwind CSS** + **shadcn/ui** (Radix primitives) |
-| 3D | **three.js** + **@google/model-viewer** |
-| Data/state | **React Query**, a lightweight `AppContext` |
-| Routing | **react-router-dom** |
-| Tests | **Vitest** + **Testing Library** |
+| 3D | **three.js** + **@google/model-viewer** (deferred-loaded) |
+| Data/state | **React Query**, a lightweight `AppContext`, a persisted `WishlistContext` |
+| Routing | **react-router-dom** (route-level code splitting) |
+| Tests | **Vitest** + **Testing Library** + **Playwright** e2e |
+| CI | **GitHub Actions** |
 
 Project shape:
 
 ```
 src/
-├── components/     # Header, Hero, ProductCard, GlobalAIChat, ModelViewer, SettingsPanel…
-├── contexts/       # AppContext — cart, filters, marketing mode, theme
+├── components/     # Header, Hero/HeroSwitch, ProductCard, CommandPalette,
+│                   #   WishlistDrawer, MobileNav, GlobalAIChat, ModelViewer, SettingsPanel…
+├── contexts/       # AppContext (cart, filters, marketing mode, theme)
+│                   #   + WishlistContext (persisted saved licences)
 ├── data/           # bundled catalogue + 3D model index
 ├── lib/
 │   ├── api.ts             # backend client with automatic offline fallback
 │   └── staticCatalogue.ts # normalises the bundled catalogue into full products
 ├── pages/          # Index, Storefront, Cart, Checkout, Marketing, NotFound
 └── test/           # Vitest suites
+e2e/                # Playwright end-to-end smoke test
 public/
-└── models/         # 381 .glb product models
+└── models/         # .glb product models
 ```
 
 ## Live demo
 
 **Live at [digitalsoftwaremarket.ai](https://digitalsoftwaremarket.ai).** ✨
-Go spin a few boxes and ask the concierge for something impossible.
+Go spin a few boxes, press ⌘K, and ask the concierge for something impossible.
 
 ## License
 
