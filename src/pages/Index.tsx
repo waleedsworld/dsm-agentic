@@ -1,6 +1,6 @@
 import AnnouncementBar from "@/components/AnnouncementBar";
 import Header from "@/components/Header";
-import Hero from "@/components/Hero";
+import HeroSwitch from "@/components/HeroSwitch";
 import LogoStrip from "@/components/LogoStrip";
 import RoleGrid from "@/components/RoleGrid";
 import StatsStatement from "@/components/StatsStatement";
@@ -19,8 +19,8 @@ const Index = () => {
       <GrainOverlay />
       <AnnouncementBar />
       <Header />
-      <main>
-        <Hero />
+      <main id="main-content">
+        <HeroSwitch />
         <LogoStrip />
         <RoleGrid />
         <StatsStatement />

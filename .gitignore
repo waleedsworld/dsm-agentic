@@ -25,3 +25,9 @@ dist-ssr
 
 # agent working files
 .agent-tmp
+
+# test artifacts
+/playwright-report
+/test-results
+/e2e-results
+coverage
