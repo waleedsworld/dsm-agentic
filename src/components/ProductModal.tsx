@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import ProductModelViewer from './ProductModelViewer';
 import { Product, productChat } from '@/lib/api';
 import { useApp } from '@/contexts/AppContext';
+import WishlistButton from './WishlistButton';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Textarea } from './ui/textarea';
@@ -261,6 +262,7 @@ export default function ProductModal({ product }: ProductModalProps) {
                   >
                     Add to Cart
                   </Button>
+                  <WishlistButton product={product} variant="inline" />
                   <Button variant="outline" className="flex-1 border-white/[0.06] text-[#FEFEFE]">
                     Request Quote
                   </Button>

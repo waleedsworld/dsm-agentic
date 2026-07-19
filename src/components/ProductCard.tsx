@@ -1,6 +1,7 @@
 import { CheckCircle, Star } from 'lucide-react';
 import { Product } from '@/lib/api';
 import ProductModelViewer from './ProductModelViewer';
+import WishlistButton from './WishlistButton';
 import { Badge } from './ui/badge';
 
 interface ProductCardProps {
@@ -54,9 +55,12 @@ export default function ProductCard({ product, viewMode = 'grid', onClick }: Pro
               <span>Official Partner</span>
             </div>
           </div>
-          <div className="text-right">
-            <div className="font-serif text-lg text-[#FEFEFE] mb-1">{product.price}</div>
-            <div className="text-xs text-[#B1B2B3]/50">{product.licenseType}</div>
+          <div className="flex flex-col items-end gap-2">
+            <WishlistButton product={product} />
+            <div className="text-right">
+              <div className="font-serif text-lg text-[#FEFEFE] mb-1">{product.price}</div>
+              <div className="text-xs text-[#B1B2B3]/50">{product.licenseType}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -69,12 +73,17 @@ export default function ProductCard({ product, viewMode = 'grid', onClick }: Pro
       onClick={onClick}
       className="group relative cursor-pointer"
     >
-      <div className="relative aspect-[3/4] bg-white/[0.02] border border-white/[0.06] rounded-md overflow-hidden mb-4 shadow-[0_1px_3px_hsl(0_0%_0%/0.04),0_4px_16px_hsl(0_0%_0%/0.03)] transition-all duration-500 group-hover:shadow-[0_2px_6px_hsl(0_0%_0%/0.06),0_12px_40px_hsl(0_0%_0%/0.08)] group-hover:border-crimson/30">
+      <div className="relative aspect-[3/4] bg-white/[0.02] border border-white/[0.06] rounded-md overflow-hidden mb-4 shadow-[0_1px_3px_hsl(0_0%_0%/0.04),0_4px_16px_hsl(0_0%_0%/0.03)] transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-[0_10px_30px_hsl(4_65%_54%/0.12),0_20px_50px_hsl(0_0%_0%/0.12)] group-hover:border-crimson/30">
         {/* Badges */}
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-2">
           <Badge className="bg-crimson/10 text-crimson text-[10px] uppercase">
             {product.brand}
           </Badge>
+        </div>
+
+        {/* Save to wishlist */}
+        <div className="absolute top-3 right-3 z-30 opacity-0 group-hover:opacity-100 focus-within:opacity-100 [@media(hover:none)]:opacity-100 transition-opacity duration-300">
+          <WishlistButton product={product} />
         </div>
 
         {/* 3D Model */}
