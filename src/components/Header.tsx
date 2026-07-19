@@ -1,9 +1,11 @@
-import { User, ShoppingBag, ChevronDown, ArrowRight, LayoutGrid, PenTool, Box, ShieldCheck, Monitor, Cpu } from "lucide-react";
+import { User, ShoppingBag, ChevronDown, ArrowRight, LayoutGrid, PenTool, Box, ShieldCheck, Monitor, Cpu, Heart } from "lucide-react";
 import SearchBar from "./SearchBar";
+import MobileNav from "./MobileNav";
 import ProductModelViewer from "./ProductModelViewer";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useApp } from "@/contexts/AppContext";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 const categories = [
   "Operating Systems",
@@ -70,6 +72,7 @@ const categoryFeaturedModel: Record<string, { glb: string; title: string; desc: 
 
 const Header = () => {
   const { cartItemCount } = useApp();
+  const { count: wishlistCount, openWishlist } = useWishlist();
   const [isOverLightSection, setIsOverLightSection] = useState(false);
   const [activeCategory, setActiveCategory] = useState("Productivity & Office");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -134,14 +137,20 @@ const Header = () => {
           </Link>
 
           {/* Desktop Menu */}
-          <nav className="hidden lg:flex items-center gap-8 h-full overflow-visible">
-            <div 
+          <nav aria-label="Primary" className="hidden lg:flex items-center gap-8 h-full overflow-visible">
+            <div
               className="h-full flex items-center"
               onMouseEnter={() => setIsMenuOpen(true)}
               onMouseLeave={() => setIsMenuOpen(false)}
             >
-              <button className={`text-sm font-medium transition-colors duration-300 tracking-wide h-full flex items-center gap-1 ${isMenuOpen ? 'text-crimson' : navTextColor}`}>
-                Software <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${isMenuOpen ? 'rotate-180 opacity-100' : 'opacity-50'}`} />
+              <button
+                type="button"
+                aria-haspopup="true"
+                aria-expanded={isMenuOpen}
+                onClick={() => setIsMenuOpen((o) => !o)}
+                className={`text-sm font-medium transition-colors duration-300 tracking-wide h-full flex items-center gap-1 ${isMenuOpen ? 'text-crimson' : navTextColor}`}
+              >
+                Software <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${isMenuOpen ? 'rotate-180 opacity-100' : 'opacity-50'}`} aria-hidden="true" />
               </button>
             </div>
 
@@ -157,15 +166,34 @@ const Header = () => {
             <div className="hidden md:block w-64">
               <SearchBar darkText={isOverLightSection} />
             </div>
-            <a href="#" className={`transition-colors duration-300 ${iconColor}`}><User className="w-5 h-5" strokeWidth={1.5} /></a>
-            <Link to="/cart" className={`relative transition-colors duration-300 ${iconColor}`}>
-              <ShoppingBag className="w-5 h-5" strokeWidth={1.5} />
+            <a href="#" aria-label="Account" className={`hidden sm:inline-flex items-center justify-center min-w-[44px] min-h-[44px] transition-colors duration-300 ${iconColor}`}><User className="w-5 h-5" strokeWidth={1.5} aria-hidden="true" /></a>
+            <button
+              type="button"
+              onClick={openWishlist}
+              aria-label={wishlistCount > 0 ? `Saved licences, ${wishlistCount} item${wishlistCount === 1 ? "" : "s"}` : "Saved licences, empty"}
+              className={`relative inline-flex items-center justify-center min-w-[44px] min-h-[44px] transition-colors duration-300 ${iconColor}`}
+            >
+              <Heart className="w-5 h-5" strokeWidth={1.5} aria-hidden="true" />
+              {wishlistCount > 0 && (
+                <span aria-hidden="true" className="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-crimson text-[#FEFEFE] text-[10px] font-semibold leading-[18px] text-center">
+                  {wishlistCount > 99 ? "99+" : wishlistCount}
+                </span>
+              )}
+            </button>
+            <Link
+              to="/cart"
+              aria-label={cartItemCount > 0 ? `Cart, ${cartItemCount} item${cartItemCount === 1 ? "" : "s"}` : "Cart, empty"}
+              className={`relative inline-flex items-center justify-center min-w-[44px] min-h-[44px] transition-colors duration-300 ${iconColor}`}
+            >
+              <ShoppingBag className="w-5 h-5" strokeWidth={1.5} aria-hidden="true" />
               {cartItemCount > 0 && (
-                <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-crimson text-[#FEFEFE] text-[10px] font-semibold leading-[18px] text-center">
+                <span aria-hidden="true" className="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-crimson text-[#FEFEFE] text-[10px] font-semibold leading-[18px] text-center">
                   {cartItemCount > 99 ? "99+" : cartItemCount}
                 </span>
               )}
             </Link>
+            {/* Mobile / tablet navigation trigger (below lg the desktop mega-menu is hidden) */}
+            <MobileNav darkText={isOverLightSection} />
           </div>
         </div>
       </header>
@@ -245,7 +273,7 @@ const Header = () => {
                   glbSrc={categoryFeaturedModel[activeCategory]?.glb}
                   fallbackIcon={
                     <div className={`w-16 h-16 rounded-xl flex items-center justify-center ${
-                      isOverLightSection 
+                      isOverLightSection
                         ? 'bg-black/[0.04] border border-black/[0.08]'
                         : 'bg-white/[0.04] border border-white/[0.08]'
                     }`}>

@@ -11,6 +11,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { Filter, Grid, List, ChevronLeft, ChevronRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ProductCardSkeleton from '@/components/ProductCardSkeleton';
+import EmptyState from '@/components/EmptyState';
 
 const BRANDS = ['Microsoft', 'Adobe', 'Autodesk', 'Chaos', 'SketchUp', 'Kaspersky'];
 const CATEGORIES = ['Office', 'CAD & Engineering', 'Design & Creativity', 'Operating Systems', 'Security & Utility'];
@@ -86,7 +88,7 @@ export default function Storefront() {
   return (
     <div className="min-h-screen bg-surface-dark">
       <Header />
-      <main className="max-w-[1600px] mx-auto px-6 pt-24 pb-12">
+      <main id="main-content" className="max-w-[1600px] mx-auto px-6 pt-24 pb-12">
         {/* Header Section */}
         <div className="mb-8">
           <h1 className="font-serif text-4xl text-[#FEFEFE] mb-4">Store</h1>
@@ -212,12 +214,15 @@ export default function Storefront() {
 
             {/* Loading State */}
             {isLoading && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="aspect-[3/4] bg-white/[0.02] border border-white/[0.06] rounded-md animate-pulse"
-                  />
+              <div
+                className={
+                  viewMode === 'grid'
+                    ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
+                    : 'space-y-4'
+                }
+              >
+                {Array.from({ length: viewMode === 'grid' ? 8 : 5 }).map((_, i) => (
+                  <ProductCardSkeleton key={i} viewMode={viewMode} />
                 ))}
               </div>
             )}
@@ -226,16 +231,17 @@ export default function Storefront() {
             {!isLoading && (
               <>
                 {products.length === 0 ? (
-                  <div className="text-center py-16">
-                    <p className="text-[#B1B2B3] mb-4">No products found</p>
-                    <Button
-                      variant="outline"
-                      onClick={clearFilters}
-                      className="border-white/[0.06] text-[#FEFEFE]"
-                    >
-                      Clear filters
-                    </Button>
-                  </div>
+                  <EmptyState
+                    variant={state.searchQuery ? 'search' : 'default'}
+                    title={state.searchQuery ? 'No matches found' : 'Nothing on the shelf'}
+                    description={
+                      state.searchQuery
+                        ? `We could not find any licences for "${state.searchQuery}". Try a different term or clear your filters.`
+                        : 'We could not find any licences matching your selection. Try loosening a filter or two.'
+                    }
+                    actionLabel={hasActiveFilters ? 'Clear filters' : 'Reset search'}
+                    onAction={clearFilters}
+                  />
                 ) : (
                   <>
                     <div
