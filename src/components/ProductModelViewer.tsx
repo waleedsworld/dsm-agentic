@@ -33,9 +33,13 @@ const ProductModelViewer = ({
   const animFrameRef = useRef<number>(0);
   const snapTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isMobile = useRef(false);
+  const prefersReducedMotion = useRef(false);
 
   useEffect(() => {
     isMobile.current = window.matchMedia("(hover: none)").matches;
+    prefersReducedMotion.current = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
   }, []);
 
   useEffect(() => {
@@ -131,6 +135,11 @@ const ProductModelViewer = ({
     setIsLoaded(true);
     const mv = modelRef.current;
     if (mv) {
+      // Honor reduced-motion: leave the model static rather than auto-rotating.
+      if (prefersReducedMotion.current) {
+        mv.removeAttribute("auto-rotate");
+        return;
+      }
       mv.setAttribute("auto-rotate", "");
       mv.setAttribute(
         "rotation-per-second",

@@ -22,7 +22,7 @@ export default function Cart() {
       <AnnouncementBar />
       <Header />
 
-      <main className="max-w-[1600px] mx-auto px-6 pt-44 pb-16">
+      <main id="main-content" className="max-w-[1600px] mx-auto px-6 pt-44 pb-16">
         <div className="flex items-end justify-between mb-10">
           <div>
             <span className="inline-block text-[10px] font-semibold text-crimson uppercase tracking-[0.18em] mb-3">

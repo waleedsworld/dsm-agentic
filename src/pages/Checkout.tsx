@@ -95,7 +95,7 @@ export default function Checkout() {
       <AnnouncementBar />
       <Header />
 
-      <main className="max-w-[1600px] mx-auto px-6 pt-44 pb-16">
+      <main id="main-content" className="max-w-[1600px] mx-auto px-6 pt-44 pb-16">
         <div className="mb-10">
           <span className="inline-block text-[10px] font-semibold text-crimson uppercase tracking-[0.2em] mb-3">
             Secure Checkout

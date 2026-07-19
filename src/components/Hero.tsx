@@ -1,23 +1,43 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { ArrowRight, ArrowDown, Check, Zap, Shield } from "lucide-react";
 import { useHeroReveal, useCursorGlow } from "@/hooks/useScrollAnimation";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import MagnifyText from "./MagnifyText";
-import HeroMesh from "./HeroMesh";
 import type { MeshAccent } from "./HeroMesh";
+
+// three.js + the animated hero mesh (~1MB) are the single largest asset on the
+// landing page. Splitting them into an async chunk lets the hero text/CTAs
+// paint immediately while the WebGL background streams in behind them — and
+// users who prefer reduced motion never download or boot it at all.
+const HeroMesh = lazy(() => import("./HeroMesh"));
 
 const Hero = () => {
   const ref = useHeroReveal();
   const { containerRef, glowRef } = useCursorGlow();
   const [meshAccent, setMeshAccent] = useState<MeshAccent>("red");
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
     <section
       ref={containerRef}
       className="cursor-glow relative min-h-screen flex items-center justify-center pt-28 overflow-hidden bg-[#030305]"
     >
-      {/* Three.js interactive mesh background */}
-      <div className="absolute inset-0 w-full h-full z-0">
-        <HeroMesh accent={meshAccent} />
+      {/* Three.js interactive mesh background — deferred, and skipped entirely
+          for reduced-motion users (a static gradient stands in for them). */}
+      <div className="absolute inset-0 w-full h-full z-0" aria-hidden="true">
+        {prefersReducedMotion ? (
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse at 50% 40%, hsl(4 45% 22% / 0.35) 0%, #030305 70%)",
+            }}
+          />
+        ) : (
+          <Suspense fallback={<div className="absolute inset-0 bg-[#030305]" />}>
+            <HeroMesh accent={meshAccent} />
+          </Suspense>
+        )}
       </div>
 
       {/* Ambient orbs — layered above mesh, below text (radial gradients, no blur) */}
